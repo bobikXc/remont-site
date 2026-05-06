@@ -4,31 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>РемонтКомПро — Ремонт офисов и магазинов</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
- <!-- Заставка LINEA -->
-<div class="splash-screen" id="splashScreen">
-    <div class="splash-content">
-        <!-- Логотип LINEA -->
-        <div class="splash-logo-linea">
-            <div class="linea-mark">
+    <!-- Заставка LINEA -->
+    <div class="splash-screen" id="splashScreen" aria-label="Загрузка сайта LINEA">
+        <div class="splash-content">
+            <div class="splash-logo-linea">
                 <img src="img/linea-logo.png" alt="LINEA" class="linea-logo-img">
-            <div class="splash-loader">
-            <div class="loader-bar"></div>
+            </div>
+            <div class="splash-loader" aria-hidden="true">
+                <div class="loader-bar"></div>
+            </div>
+            <p class="splash-hint">Дизайн. Контроль. Результат.</p>
         </div>
     </div>
-</div>
-        
-        <!-- Полоска загрузки -->
-        <div class="splash-loader">
-            <div class="loader-bar"></div>
-        </div>
-    </div>
-</div>
     <!-- Шапка -->
     <header class="header">
         <div class="container">
@@ -169,7 +161,7 @@
     </div>
 </section>
 <!-- Портфолио (Слайдер До/После) -->
-<section class="portfolio">
+<section class="portfolio" id="portfolio">
     <div class="container">
         <h2>Наши проекты</h2>
         <p class="subtitle">Передвигайте ползунок, чтобы увидеть разницу</p>
@@ -311,9 +303,8 @@
         </div>
     </div>
 </footer>
-    <script src="script.js"></script>
     <!-- Кнопка "Наверх" -->
-<button class="scroll-top" id="scrollTop">↑</button>
-</body>
+    <button class="scroll-top" id="scrollTop" aria-label="Наверх">↑</button>
+    <script src="script.js"></script>
 </body>
 </html>
