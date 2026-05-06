@@ -1,49 +1,25 @@
 /* Простые современные шрифты */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-/* ========== ЗАСТАВКА ПРИ ЗАГРУЗКЕ ========== */
+/* ========== ЗАСТАВКА LINEA (МОБИЛЬНАЯ ВЕРСИЯ) ========== */
 .splash-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background: #0d0d0d;
+    height: 100vh;
+    height: -webkit-fill-available; /* для iOS Safari */
+    background: #0a0a0a;
     z-index: 99999;
+    display: -webkit-flex;
     display: flex;
+    -webkit-align-items: center;
     align-items: center;
+    -webkit-justify-content: center;
     justify-content: center;
     transition: opacity 0.8s ease, visibility 0.8s ease;
-}
-/* Плавное появление всего сайта */
-body {
-    animation: bodyFadeIn 1s ease 1.5s both;
+    cursor: pointer;
 }
 
-@keyframes bodyFadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-body {
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    opacity: 0;
-    animation: bodyFadeIn 0.6s ease 2s forwards;
-}
-
-@keyframes bodyFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-/* Блокируем скролл при заставке */
-body.splash-active {
-    overflow: hidden;
-}
-/* Класс для скрытия заставки */
 .splash-screen.hidden {
     opacity: 0;
     visibility: hidden;
@@ -52,91 +28,112 @@ body.splash-active {
 
 .splash-content {
     text-align: center;
+    padding: 20px;
 }
 
-/* Иконка */
-.splash-icon {
-    display: block;
-    font-size: 80px;
-    margin-bottom: 20px;
-    animation: splashBounce 1.5s ease infinite;
-    filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
-}
-
-@keyframes splashBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-/* Заголовок */
-.splash-title {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    letter-spacing: 2px;
+.linea-logo-img {
+    max-width: 130px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
     opacity: 0;
-    animation: fadeInUp 0.8s ease 0.3s forwards;
+    animation: logoReveal 1s ease forwards;
+    -webkit-animation: logoReveal 1s ease forwards;
 }
 
-.splash-text {
-    color: #fff;
+@keyframes logoReveal {
+    from {
+        opacity: 0;
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
 }
 
-.splash-accent {
-    color: #d4af37;
+@-webkit-keyframes logoReveal {
+    from { opacity: 0; -webkit-transform: scale(0.8); }
+    to   { opacity: 1; -webkit-transform: scale(1); }
 }
 
-/* Подзаголовок */
-.splash-subtitle {
-    color: #666;
-    font-size: 16px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-top: 30px;
-    opacity: 0;
-    animation: fadeIn 0.8s ease 1s forwards;
-}
-
-/* Полоска загрузки */
+/* Загрузочная полоска */
 .splash-loader {
-    width: 200px;
-    height: 2px;
-    background: #333;
-    margin: 0 auto;
-    border-radius: 2px;
+    width: 160px;
+    height: 1px;
+    background: #222;
+    margin: 50px auto 0;
+    border-radius: 1px;
     overflow: hidden;
     opacity: 0;
-    animation: fadeIn 0.5s ease 0.5s forwards;
+    animation: lineaFadeUp 0.5s ease 1.6s forwards;
+    -webkit-animation: lineaFadeUp 0.5s ease 1.6s forwards;
 }
 
 .loader-bar {
     height: 100%;
     width: 0;
     background: #d4af37;
-    border-radius: 2px;
-    animation: loading 2s ease-in-out forwards;
+    animation: loading 2.2s ease-in-out forwards;
+    -webkit-animation: loading 2.2s ease-in-out forwards;
 }
 
 @keyframes loading {
     0% { width: 0; }
-    50% { width: 70%; }
+    30% { width: 30%; }
+    60% { width: 70%; }
     100% { width: 100%; }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@-webkit-keyframes loading {
+    0% { width: 0; }
+    30% { width: 30%; }
+    60% { width: 70%; }
+    100% { width: 100%; }
 }
 
-@keyframes fadeIn {
+/* Блокировка скролла */
+body.splash-active {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+/* Плавное появление сайта после заставки */
+body {
+    opacity: 0;
+    animation: bodyFadeIn 0.6s ease 2s forwards;
+    -webkit-animation: bodyFadeIn 0.6s ease 2s forwards;
+}
+
+@keyframes bodyFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+@-webkit-keyframes bodyFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-width: 480px) {
+    .linea-logo-img {
+        max-width: 100px;
+    }
+    .linea-title {
+        font-size: 36px;
+        letter-spacing: 8px;
+    }
+    .linea-tagline {
+        font-size: 11px;
+        letter-spacing: 4px;
+    }
+    .splash-loader {
+        width: 120px;
+    }
 }
 * {
     margin: 0;

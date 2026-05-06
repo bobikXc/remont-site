@@ -1,25 +1,34 @@
 // Ждем полной загрузки страницы
 document.addEventListener('DOMContentLoaded', function() {
-// ========== ЗАСТАВКА ПРИ ЗАГРУЗКЕ ==========
+// ========== ЗАСТАВКА LINEA ==========
 const splashScreen = document.getElementById('splashScreen');
+if (splashScreen) {
+    // Блокируем скролл
+    document.body.classList.add('splash-active');
 
-// Блокируем скролл
-document.body.classList.add('splash-active');
-
-function hideSplash() {
-    if (splashScreen) {
+    function hideSplash() {
+        if (!splashScreen) return;
         splashScreen.classList.add('hidden');
         document.body.classList.remove('splash-active');
-        setTimeout(() => {
-            splashScreen.remove();
+        // Убираем элемент после анимации
+        setTimeout(function() {
+            if (splashScreen) splashScreen.remove();
         }, 800);
     }
-}
 
-setTimeout(hideSplash, 3500);
+    // Скрываем через 3 секунды
+    const timer = setTimeout(hideSplash, 3000);
 
-if (splashScreen) {
-    splashScreen.addEventListener('click', hideSplash);
+    // Возможность пропустить по клику или тапу
+    splashScreen.addEventListener('click', function() {
+        clearTimeout(timer);
+        hideSplash();
+    });
+    splashScreen.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        clearTimeout(timer);
+        hideSplash();
+    });
 }
     // ========== СЛАЙДЕР ДО/ПОСЛЕ ==========
     function initComparisonSliders() {
