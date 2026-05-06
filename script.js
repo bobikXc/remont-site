@@ -1,6 +1,26 @@
 // Ждем полной загрузки страницы
 document.addEventListener('DOMContentLoaded', function() {
-    
+// ========== ЗАСТАВКА ПРИ ЗАГРУЗКЕ ==========
+const splashScreen = document.getElementById('splashScreen');
+
+// Блокируем скролл
+document.body.classList.add('splash-active');
+
+function hideSplash() {
+    if (splashScreen) {
+        splashScreen.classList.add('hidden');
+        document.body.classList.remove('splash-active');
+        setTimeout(() => {
+            splashScreen.remove();
+        }, 800);
+    }
+}
+
+setTimeout(hideSplash, 3500);
+
+if (splashScreen) {
+    splashScreen.addEventListener('click', hideSplash);
+}
     // ========== СЛАЙДЕР ДО/ПОСЛЕ ==========
     function initComparisonSliders() {
         const containers = document.querySelectorAll('.img-comp-container');
