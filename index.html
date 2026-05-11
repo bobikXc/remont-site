@@ -36,7 +36,7 @@
         <h1>Ремонт коммерческой недвижимости под ключ</h1>
         <p>LINEA — дизайн-проекты и ремонт офисов, магазинов, ресторанов в Москве. ДИЗАЙН. КОНТРОЛЬ. РЕЗУЛЬТАТ.</p>
         <div class="hero-buttons">
-            <a href="#estimateForm" class="btn">Рассчитать стоимость</a>
+            <a href="#costCalculator" class="btn">Рассчитать стоимость</a>
             <a href="#portfolio" class="btn btn-outline">Смотреть портфолио</a>
         </div>
         <div class="hero-features">
@@ -226,6 +226,87 @@
         </div>
     </div>
 </section>
+
+    <!-- Калькулятор стоимости ремонта -->
+    <section class="estimate-calculator" id="costCalculator" aria-labelledby="calculatorHeading">
+        <div class="container">
+            <h2 id="calculatorHeading">Калькулятор стоимости ремонта</h2>
+            <p class="calculator-lead">Оцените бюджет и сроки по ключевым параметрам объекта. Итоговая смета после выезда специалиста.</p>
+
+            <div class="calculator-layout">
+                <form class="calculator-form" id="renovationCalculatorForm" novalidate>
+                    <div class="calc-field">
+                        <label for="calcRoomType">Тип помещения</label>
+                        <select id="calcRoomType" name="roomType" class="calc-select" required aria-describedby="calcRoomTypeError">
+                            <option value="">Выберите тип</option>
+                            <option value="office">Офис</option>
+                            <option value="shop">Магазин</option>
+                            <option value="restaurant">Ресторан</option>
+                            <option value="beauty">Салон красоты</option>
+                            <option value="medical">Медицинский центр</option>
+                        </select>
+                        <span class="calc-field-error" id="calcRoomTypeError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <div class="calc-field">
+                        <div class="calc-range-header">
+                            <label for="calcArea">Площадь</label>
+                            <output class="calc-area-value" id="calcAreaOutput" for="calcArea">100 м²</output>
+                        </div>
+                        <input type="range" id="calcArea" name="area" class="calc-range" min="20" max="1000" step="10" value="100" aria-valuemin="20" aria-valuemax="1000" aria-valuenow="100">
+                    </div>
+
+                    <fieldset class="calc-fieldset">
+                        <legend>Дополнительные услуги <span class="calc-legend-hint">(к стоимости за м²)</span></legend>
+                        <div class="calc-checkboxes">
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="design" data-rate="500">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Дизайн-проект <span class="calc-rate">+500 ₽/м²</span></span>
+                            </label>
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="engineering" data-rate="800">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Инженерные системы <span class="calc-rate">+800 ₽/м²</span></span>
+                            </label>
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="supervision" data-rate="300">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Авторский надзор <span class="calc-rate">+300 ₽/м²</span></span>
+                            </label>
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="smart" data-rate="600">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Умный офис <span class="calc-rate">+600 ₽/м²</span></span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="calc-field">
+                        <label for="calcFinishClass">Класс отделки</label>
+                        <select id="calcFinishClass" name="finishClass" class="calc-select" required aria-describedby="calcFinishClassError">
+                            <option value="">Выберите класс</option>
+                            <option value="economy" data-base="5000">Эконом (от 5&nbsp;000 ₽/м²)</option>
+                            <option value="business" data-base="9000">Бизнес (от 9&nbsp;000 ₽/м²)</option>
+                            <option value="premium" data-base="15000">Премиум (от 15&nbsp;000 ₽/м²)</option>
+                        </select>
+                        <span class="calc-field-error" id="calcFinishClassError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <button type="submit" class="btn calc-submit">Рассчитать стоимость</button>
+                </form>
+
+                <div class="calculator-result-wrap" id="calculatorResultWrap" hidden>
+                    <div class="calculator-result" id="calculatorResult" role="region" aria-live="polite" aria-label="Результат расчёта">
+                        <h3 class="calculator-result-title">Ваш ориентир</h3>
+                        <p class="calculator-result-price" id="calcResultPrice"></p>
+                        <p class="calculator-result-term" id="calcResultTerm"></p>
+                        <p class="calculator-result-note">Расчёт ориентировочный. Точная смета после замера и ТЗ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Форма обратной связи -->
     <section class="contact-form">
