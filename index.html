@@ -13,7 +13,7 @@
     <div class="splash-screen" id="splashScreen" aria-label="Загрузка сайта LINEA">
         <div class="splash-content">
             <div class="splash-logo-linea">
-                <img src="img/linea-logo.png" alt="LINEA" class="linea-logo-img">
+                <img src="img/linea-logo.png" alt="LINEA" class="linea-logo-img" width="220" height="80" decoding="async" fetchpriority="high">
             </div>
             <div class="splash-loader" aria-hidden="true">
                 <div class="loader-bar"></div>
@@ -36,7 +36,7 @@
         <h1>Ремонт коммерческой недвижимости под ключ</h1>
         <p>LINEA — дизайн-проекты и ремонт офисов, магазинов, ресторанов в Москве. ДИЗАЙН. КОНТРОЛЬ. РЕЗУЛЬТАТ.</p>
         <div class="hero-buttons">
-            <a href="#estimateForm" class="btn">Рассчитать стоимость</a>
+            <a href="#costCalculator" class="btn">Рассчитать стоимость</a>
             <a href="#portfolio" class="btn btn-outline">Смотреть портфолио</a>
         </div>
         <div class="hero-features">
@@ -160,72 +160,224 @@
         </div>
     </div>
 </section>
-<!-- Портфолио (Слайдер До/После) -->
+<!-- Портфолио: галерея До/После с фильтрами -->
 <section class="portfolio" id="portfolio">
     <div class="container">
         <h2>Наши проекты</h2>
-        <p class="subtitle">Передвигайте ползунок, чтобы увидеть разницу</p>
-        
-        <div class="slider-wrapper">
-            <!-- Проект 1: Офис IT-компании -->
-            <div class="comparison-slider">
-                <h3 class="project-title">Офис IT-компании — 250 м²</h3>
+        <p class="subtitle">Передвигайте ползунок на фото, чтобы сравнить «до» и «после». Отфильтруйте проекты по типу помещения.</p>
+
+        <div class="portfolio-filters" role="group" aria-label="Фильтр по типу помещения">
+            <button type="button" class="portfolio-filter-btn is-active" data-filter="all" aria-pressed="true">Все</button>
+            <button type="button" class="portfolio-filter-btn" data-filter="office" aria-pressed="false">Офисы</button>
+            <button type="button" class="portfolio-filter-btn" data-filter="shop" aria-pressed="false">Магазины</button>
+            <button type="button" class="portfolio-filter-btn" data-filter="restaurant" aria-pressed="false">Рестораны</button>
+            <button type="button" class="portfolio-filter-btn" data-filter="beauty" aria-pressed="false">Салоны красоты</button>
+        </div>
+
+        <div class="portfolio-grid" id="portfolioGrid">
+            <article class="portfolio-item comparison-slider" data-category="office">
+                <h3 class="project-title">Офис IT-компании «ТехноПро»</h3>
+                <ul class="project-specs" aria-label="Параметры проекта">
+                    <li><span class="project-spec-label">Тип помещения</span> <span class="project-spec-value">Офис</span></li>
+                    <li><span class="project-spec-label">Площадь</span> <span class="project-spec-value">250 м²</span></li>
+                    <li><span class="project-spec-label">Срок</span> <span class="project-spec-value">45 дней</span></li>
+                    <li><span class="project-spec-label">Бюджет</span> <span class="project-spec-value">4,2 млн ₽</span></li>
+                </ul>
                 <div class="img-comp-container">
                     <div class="img-comp-img after-img">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" alt="После ремонта">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=82" alt="Офис ТехноПро после ремонта" loading="lazy" decoding="async" width="900" height="600">
                     </div>
                     <div class="img-comp-img before-img img-comp-overlay">
-                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="До ремонта">
+                        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=900&q=82" alt="Офис ТехноПро до ремонта" loading="lazy" decoding="async" width="900" height="600">
                     </div>
-                    <div class="img-comp-slider"></div>
+                    <div class="img-comp-slider" aria-hidden="true"></div>
                 </div>
-                <div class="project-details">
-                    <span>🏢 250 м²</span>
-                    <span>⏱ 45 дней</span>
-                    <span>💰 4.2 млн ₽</span>
-                </div>
-            </div>
-            
-            <!-- Проект 2: Ресторан -->
-            <div class="comparison-slider">
-                <h3 class="project-title">Ресторан "ГастроБар" — 180 м²</h3>
+                <p class="project-summary">Полный цикл: демонтаж, перепланировка open space и переговорных, инженерия, чистовая отделка, мебель и освещение по брендбуку заказчика.</p>
+            </article>
+
+            <article class="portfolio-item comparison-slider" data-category="restaurant">
+                <h3 class="project-title">Ресторан «ГастроБар»</h3>
+                <ul class="project-specs" aria-label="Параметры проекта">
+                    <li><span class="project-spec-label">Тип помещения</span> <span class="project-spec-value">Ресторан</span></li>
+                    <li><span class="project-spec-label">Площадь</span> <span class="project-spec-value">180 м²</span></li>
+                    <li><span class="project-spec-label">Срок</span> <span class="project-spec-value">60 дней</span></li>
+                    <li><span class="project-spec-label">Бюджет</span> <span class="project-spec-value">6,8 млн ₽</span></li>
+                </ul>
                 <div class="img-comp-container">
                     <div class="img-comp-img after-img">
-                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="После ремонта">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=82" alt="ГастроБар после ремонта" loading="lazy" decoding="async" width="900" height="600">
                     </div>
                     <div class="img-comp-img before-img img-comp-overlay">
-                        <img src="https://images.unsplash.com/photo-1533035353720-f1c6a75cddab?w=800&q=80" alt="До ремонта">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&q=82" alt="ГастроБар до ремонта" loading="lazy" decoding="async" width="900" height="600">
                     </div>
-                    <div class="img-comp-slider"></div>
+                    <div class="img-comp-slider" aria-hidden="true"></div>
                 </div>
-                <div class="project-details">
-                    <span>🍽 180 м²</span>
-                    <span>⏱ 60 дней</span>
-                    <span>💰 6.8 млн ₽</span>
-                </div>
-            </div>
-            
-            <!-- Проект 3: Магазин -->
-            <div class="comparison-slider">
-                <h3 class="project-title">Бутик одежды — 120 м²</h3>
+                <p class="project-summary">Зал, барная зона и кухня: пожарная безопасность Horeca, вентиляция, декоративные покрытия, санузлы для гостей и персонала.</p>
+            </article>
+
+            <article class="portfolio-item comparison-slider" data-category="shop">
+                <h3 class="project-title">Бутик одежды «Moda»</h3>
+                <ul class="project-specs" aria-label="Параметры проекта">
+                    <li><span class="project-spec-label">Тип помещения</span> <span class="project-spec-value">Магазин</span></li>
+                    <li><span class="project-spec-label">Площадь</span> <span class="project-spec-value">120 м²</span></li>
+                    <li><span class="project-spec-label">Срок</span> <span class="project-spec-value">30 дней</span></li>
+                    <li><span class="project-spec-label">Бюджет</span> <span class="project-spec-value">2,9 млн ₽</span></li>
+                </ul>
                 <div class="img-comp-container">
                     <div class="img-comp-img after-img">
-                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" alt="После ремонта">
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900&q=82" alt="Moda после ремонта" loading="lazy" decoding="async" width="900" height="600">
                     </div>
                     <div class="img-comp-img before-img img-comp-overlay">
-                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80" alt="До ремонта">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=900&q=82" alt="Moda до ремонта" loading="lazy" decoding="async" width="900" height="600">
                     </div>
-                    <div class="img-comp-slider"></div>
+                    <div class="img-comp-slider" aria-hidden="true"></div>
                 </div>
-                <div class="project-details">
-                    <span>👗 120 м²</span>
-                    <span>⏱ 30 дней</span>
-                    <span>💰 2.9 млн ₽</span>
+                <p class="project-summary">Торговый зал, примерочные и кассовая зона: нишевое освещение, рейлы и витрины, устойчивые покрытия для высокого трафика.</p>
+            </article>
+
+            <article class="portfolio-item comparison-slider" data-category="beauty">
+                <h3 class="project-title">Салон красоты «BeautyLab»</h3>
+                <ul class="project-specs" aria-label="Параметры проекта">
+                    <li><span class="project-spec-label">Тип помещения</span> <span class="project-spec-value">Салон красоты</span></li>
+                    <li><span class="project-spec-label">Площадь</span> <span class="project-spec-value">90 м²</span></li>
+                    <li><span class="project-spec-label">Срок</span> <span class="project-spec-value">25 дней</span></li>
+                    <li><span class="project-spec-label">Бюджет</span> <span class="project-spec-value">2,1 млн ₽</span></li>
+                </ul>
+                <div class="img-comp-container">
+                    <div class="img-comp-img after-img">
+                        <img src="https://images.unsplash.com/photo-1560066984-138d9374b0ef?w=900&q=82" alt="BeautyLab после ремонта" loading="lazy" decoding="async" width="900" height="600">
+                    </div>
+                    <div class="img-comp-img before-img img-comp-overlay">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&q=82" alt="BeautyLab до ремонта" loading="lazy" decoding="async" width="900" height="600">
+                    </div>
+                    <div class="img-comp-slider" aria-hidden="true"></div>
                 </div>
-            </div>
+                <p class="project-summary">Зоны окрашивания и маникюра, мойка, ресепшн: влагоустойчивые материалы, продуманная электрика под оборудование и мягкий свет.</p>
+            </article>
+
+            <article class="portfolio-item comparison-slider" data-category="medical">
+                <h3 class="project-title">Медицинский центр «Здоровье»</h3>
+                <ul class="project-specs" aria-label="Параметры проекта">
+                    <li><span class="project-spec-label">Тип помещения</span> <span class="project-spec-value">Медицинский центр</span></li>
+                    <li><span class="project-spec-label">Площадь</span> <span class="project-spec-value">300 м²</span></li>
+                    <li><span class="project-spec-label">Срок</span> <span class="project-spec-value">75 дней</span></li>
+                    <li><span class="project-spec-label">Бюджет</span> <span class="project-spec-value">8,5 млн ₽</span></li>
+                </ul>
+                <div class="img-comp-container">
+                    <div class="img-comp-img after-img">
+                        <img src="https://images.unsplash.com/photo-1631217868264-e5d90c7edaee?w=900&q=82" alt="Здоровье после ремонта" loading="lazy" decoding="async" width="900" height="600">
+                    </div>
+                    <div class="img-comp-img before-img img-comp-overlay">
+                        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&q=82" alt="Здоровье до ремонта" loading="lazy" decoding="async" width="900" height="600">
+                    </div>
+                    <div class="img-comp-slider" aria-hidden="true"></div>
+                </div>
+                <p class="project-summary">Кабинеты приёма, процедурные и коридоры: покрытия для клиник, инженерия, зоны ожидания и стерильные требования к отделке.</p>
+            </article>
+
+            <article class="portfolio-item comparison-slider" data-category="shop">
+                <h3 class="project-title">Магазин электроники «TechStore»</h3>
+                <ul class="project-specs" aria-label="Параметры проекта">
+                    <li><span class="project-spec-label">Тип помещения</span> <span class="project-spec-value">Магазин</span></li>
+                    <li><span class="project-spec-label">Площадь</span> <span class="project-spec-value">150 м²</span></li>
+                    <li><span class="project-spec-label">Срок</span> <span class="project-spec-value">35 дней</span></li>
+                    <li><span class="project-spec-label">Бюджет</span> <span class="project-spec-value">3,6 млн ₽</span></li>
+                </ul>
+                <div class="img-comp-container">
+                    <div class="img-comp-img after-img">
+                        <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=900&q=82" alt="TechStore после ремонта" loading="lazy" decoding="async" width="900" height="600">
+                    </div>
+                    <div class="img-comp-img before-img img-comp-overlay">
+                        <img src="https://images.unsplash.com/photo-1534452203293-494d7d2acf40?w=900&q=82" alt="TechStore до ремонта" loading="lazy" decoding="async" width="900" height="600">
+                    </div>
+                    <div class="img-comp-slider" aria-hidden="true"></div>
+                </div>
+                <p class="project-summary">Демонстрационные столы, стеллажи и зона сервиса: усиленная электрика, антистатические покрытия, навигация и подсветка витрин.</p>
+            </article>
         </div>
     </div>
 </section>
+
+    <!-- Калькулятор стоимости ремонта -->
+    <section class="estimate-calculator" id="costCalculator" aria-labelledby="calculatorHeading">
+        <div class="container">
+            <h2 id="calculatorHeading">Калькулятор стоимости ремонта</h2>
+            <p class="calculator-lead">Оцените бюджет и сроки по ключевым параметрам объекта. Итоговая смета после выезда специалиста.</p>
+
+            <div class="calculator-layout">
+                <form class="calculator-form" id="renovationCalculatorForm" novalidate>
+                    <div class="calc-field">
+                        <label for="calcRoomType">Тип помещения</label>
+                        <select id="calcRoomType" name="roomType" class="calc-select" required aria-describedby="calcRoomTypeError">
+                            <option value="">Выберите тип</option>
+                            <option value="office">Офис</option>
+                            <option value="shop">Магазин</option>
+                            <option value="restaurant">Ресторан</option>
+                            <option value="beauty">Салон красоты</option>
+                            <option value="medical">Медицинский центр</option>
+                        </select>
+                        <span class="calc-field-error" id="calcRoomTypeError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <div class="calc-field">
+                        <div class="calc-range-header">
+                            <label for="calcArea">Площадь</label>
+                            <output class="calc-area-value" id="calcAreaOutput" for="calcArea">100 м²</output>
+                        </div>
+                        <input type="range" id="calcArea" name="area" class="calc-range" min="20" max="1000" step="10" value="100" aria-valuemin="20" aria-valuemax="1000" aria-valuenow="100">
+                    </div>
+
+                    <fieldset class="calc-fieldset">
+                        <legend>Дополнительные услуги <span class="calc-legend-hint">(к стоимости за м²)</span></legend>
+                        <div class="calc-checkboxes">
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="design" data-rate="500">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Дизайн-проект <span class="calc-rate">+500 ₽/м²</span></span>
+                            </label>
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="engineering" data-rate="800">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Инженерные системы <span class="calc-rate">+800 ₽/м²</span></span>
+                            </label>
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="supervision" data-rate="300">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Авторский надзор <span class="calc-rate">+300 ₽/м²</span></span>
+                            </label>
+                            <label class="calc-checkbox">
+                                <input type="checkbox" name="extra" value="smart" data-rate="600">
+                                <span class="calc-checkbox-ui"></span>
+                                <span class="calc-checkbox-text">Умный офис <span class="calc-rate">+600 ₽/м²</span></span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="calc-field">
+                        <label for="calcFinishClass">Класс отделки</label>
+                        <select id="calcFinishClass" name="finishClass" class="calc-select" required aria-describedby="calcFinishClassError">
+                            <option value="">Выберите класс</option>
+                            <option value="economy" data-base="5000">Эконом (от 5&nbsp;000 ₽/м²)</option>
+                            <option value="business" data-base="9000">Бизнес (от 9&nbsp;000 ₽/м²)</option>
+                            <option value="premium" data-base="15000">Премиум (от 15&nbsp;000 ₽/м²)</option>
+                        </select>
+                        <span class="calc-field-error" id="calcFinishClassError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <button type="submit" class="btn calc-submit">Рассчитать стоимость</button>
+                </form>
+
+                <div class="calculator-result-wrap" id="calculatorResultWrap" hidden>
+                    <div class="calculator-result" id="calculatorResult" role="region" aria-live="polite" aria-label="Результат расчёта">
+                        <h3 class="calculator-result-title">Ваш ориентир</h3>
+                        <p class="calculator-result-price" id="calcResultPrice"></p>
+                        <p class="calculator-result-term" id="calcResultTerm"></p>
+                        <p class="calculator-result-note">Расчёт ориентировочный. Точная смета после замера и ТЗ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Форма обратной связи -->
     <section class="contact-form">
@@ -233,21 +385,24 @@
             <h2>Рассчитайте стоимость ремонта</h2>
             <p>Оставьте заявку, и мы сделаем детальный расчет сметы за 24 часа</p>
             
-            <form id="estimateForm" class="form">
+            <form id="estimateForm" class="form" novalidate>
                 <div class="form-group">
-                    <input type="text" placeholder="Ваше имя" required>
+                    <label class="visually-hidden" for="contactName">Ваше имя</label>
+                    <input id="contactName" name="name" type="text" placeholder="Ваше имя" autocomplete="name" maxlength="120" required>
                 </div>
                 <div class="form-group">
-                    <input type="tel" placeholder="+7 (___) ___-__-__" required>
+                    <label class="visually-hidden" for="contactPhone">Телефон</label>
+                    <input id="contactPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="+7 (___) ___-__-__" maxlength="18" required>
                 </div>
                 <div class="form-group form-group-wide">
-                    <textarea placeholder="Кратко опишите задачу (тип помещения, площадь, пожелания)" rows="4"></textarea>
+                    <label class="visually-hidden" for="contactMessage">Сообщение</label>
+                    <textarea id="contactMessage" name="message" placeholder="Кратко опишите задачу (тип помещения, площадь, пожелания)" rows="4" maxlength="2000"></textarea>
                 </div>
-                <button type="submit" class="btn btn-form">Отправить заявку</button>
+                <button type="submit" class="btn btn-form" id="estimateFormSubmit">Отправить заявку</button>
                 <p class="privacy">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
             </form>
             
-            <div id="successMessage" class="success-message" style="display: none;">
+            <div id="successMessage" class="success-message" style="display: none;" role="status" aria-live="polite">
                 ✅ Спасибо! Ваша заявка принята. Мы перезвоним в течение 15 минут.
             </div>
         </div>
@@ -261,9 +416,9 @@
     </div>
     <div class="map-container" id="mapContainer">
         <!-- Карта загрузится через JS, чтобы избежать ошибок CORS -->
-        <div class="map-placeholder" style="background:#e0e0e0; height:400px; display:flex; align-items:center; justify-content:center; flex-direction:column; border-radius:8px;">
-            <p style="font-size:60px; margin:0;">📍</p>
-            <p style="font-size:18px; color:#555;">Яндекс.Карта загрузится после развертывания на сервере</p>
+        <div class="map-placeholder">
+            <p class="map-placeholder-icon" aria-hidden="true">📍</p>
+            <p class="map-placeholder-text">Яндекс.Карта загрузится после развертывания на сервере</p>
         </div>
     </div>
 </section>
@@ -305,6 +460,6 @@
 </footer>
     <!-- Кнопка "Наверх" -->
     <button class="scroll-top" id="scrollTop" aria-label="Наверх">↑</button>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
