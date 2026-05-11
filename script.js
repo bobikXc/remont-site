@@ -1,5 +1,82 @@
-// Ждем полной загрузки страницы
-document.addEventListener('DOMContentLoaded', function() {
+function initLineaApp() {
+    function storageGet(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function storageSet(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (e) {
+            /* приватный режим / запрет storage */
+        }
+    }
+
+    // ========== ПЛАВНАЯ ПРОКРУТКА К ЯКОРЯМ ==========
+    function initSmoothAnchorLinks() {
+        document.addEventListener('click', function(e) {
+            var el = e.target;
+            if (el && el.nodeType === 3) el = el.parentElement;
+            if (!el || el.nodeType !== 1) return;
+            var link = el.closest('a[href^="#"]');
+            if (!link) return;
+            var href = link.getAttribute('href') || '';
+            if (href === '#' || href === '') {
+                if (link.closest('.cookie-consent') || link.closest('.footer')) {
+                    e.preventDefault();
+                    return;
+                }
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            if (href.length < 2) return;
+            var id = decodeURIComponent(href.slice(1));
+            var target = document.getElementById(id);
+            if (!target) return;
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    // ========== МАСКА ТЕЛЕФОНА +7 (XXX) XXX-XX-XX ==========
+    function initPhoneMask(input) {
+        if (!input) return;
+
+        function digitsFrom(value) {
+            var d = String(value).replace(/\D/g, '');
+            if (d.charAt(0) === '8') d = '7' + d.slice(1);
+            if (d.charAt(0) === '9') d = '7' + d;
+            if (d.charAt(0) !== '7') d = '7' + d.replace(/^7+/, '');
+            return d.slice(0, 11);
+        }
+
+        function formatFromDigits(d) {
+            var p = d.slice(1);
+            var s = '+7';
+            if (p.length > 0) s += ' (' + p.slice(0, 3);
+            if (p.length > 3) s += ') ' + p.slice(3, 6);
+            if (p.length > 6) s += '-' + p.slice(6, 8);
+            if (p.length > 8) s += '-' + p.slice(8, 10);
+            return s;
+        }
+
+        input.addEventListener('input', function() {
+            input.value = formatFromDigits(digitsFrom(input.value));
+        });
+
+        input.addEventListener('focus', function() {
+            if (!input.value.trim()) input.value = '+7 ';
+        });
+
+        input.addEventListener('blur', function() {
+            if (digitsFrom(input.value).length <= 1) input.value = '';
+        });
+    }
+
     // ========== ЗАСТАВКА LINEA ==========
     const splashScreen = document.getElementById('splashScreen');
     if (splashScreen) {
@@ -24,11 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(timer);
             hideSplash();
         });
-        splashScreen.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+        splashScreen.addEventListener('touchstart', function() {
             clearTimeout(timer);
             hideSplash();
-        }, { passive: false });
+        }, { passive: true });
     }
 
     // ========== ПЛАВНОЕ ПОЯВЛЕНИЕ БЛОКОВ ==========
@@ -39,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
             '.card',
             '.stat-item',
             '.step',
-            '.comparison-slider',
+            '.portfolio-item',
             '.estimate-calculator .calculator-layout',
             '.contact-form .form',
             '.success-message',
@@ -76,70 +152,153 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ========== СЛАЙДЕР ДО/ПОСЛЕ ==========
-    function initComparisonSliders() {
-        const containers = document.querySelectorAll('.img-comp-container');
+    // ========== СЛАЙДЕР ДО/ПОСЛЕ (один набор обработчиков на document) ==========
+    var lineaCompDrag = null;
 
-        containers.forEach(function(container) {
-            const slider = container.querySelector('.img-comp-slider');
-            const overlay = container.querySelector('.img-comp-overlay');
+    function bindDocumentComparisonHandlersOnce() {
+        if (bindDocumentComparisonHandlersOnce.done) return;
+        bindDocumentComparisonHandlersOnce.done = true;
 
-            if (!slider || !overlay) {
-                console.error('Не найдены элементы слайдера');
-                return;
-            }
+        document.addEventListener('mousemove', function(e) {
+            if (lineaCompDrag) lineaCompDrag.move(e.clientX);
+        });
 
-            let isDragging = false;
+        document.addEventListener('mouseup', function() {
+            lineaCompDrag = null;
+        });
 
-            function moveSlider(clientX) {
-                const rect = container.getBoundingClientRect();
-                let position = clientX - rect.left;
+        document.addEventListener('touchmove', function(e) {
+            if (lineaCompDrag && e.touches[0]) lineaCompDrag.move(e.touches[0].clientX);
+        }, { passive: true });
 
-                if (position < 0) position = 0;
-                if (position > rect.width) position = rect.width;
+        document.addEventListener('touchend', function() {
+            lineaCompDrag = null;
+        });
+    }
 
-                const percent = (position / rect.width) * 100;
+    function centerComparisonSlider(container) {
+        if (!container || container.dataset.lineaComp !== '1') return;
+        var move = container._lineaMoveSlider;
+        if (!move) return;
+        var rect = container.getBoundingClientRect();
+        if (rect.width < 4) return;
+        move(rect.left + rect.width / 2);
+    }
 
-                overlay.style.width = percent + '%';
-                slider.style.left = percent + '%';
-            }
+    function initComparisonSlider(container) {
+        if (!container || container.dataset.lineaComp === '1') return;
 
-            // Для мыши
-            container.addEventListener('mousedown', function(e) {
-                isDragging = true;
-                e.preventDefault();
-            });
+        var slider = container.querySelector('.img-comp-slider');
+        var overlay = container.querySelector('.img-comp-overlay');
 
-            document.addEventListener('mousemove', function(e) {
-                if (isDragging) {
-                    moveSlider(e.clientX);
+        if (!slider || !overlay) {
+            return;
+        }
+
+        container.dataset.lineaComp = '1';
+
+        function moveSlider(clientX) {
+            var rect = container.getBoundingClientRect();
+            var w = rect.width;
+            if (w < 1) return;
+
+            var position = clientX - rect.left;
+            if (position < 0) position = 0;
+            if (position > w) position = w;
+
+            var percent = (position / w) * 100;
+            overlay.style.width = percent + '%';
+            slider.style.left = percent + '%';
+        }
+
+        container._lineaMoveSlider = moveSlider;
+
+        bindDocumentComparisonHandlersOnce();
+
+        container.addEventListener('mousedown', function(e) {
+            lineaCompDrag = { move: moveSlider };
+            e.preventDefault();
+        });
+
+        container.addEventListener('touchstart', function(e) {
+            lineaCompDrag = { move: moveSlider };
+            e.preventDefault();
+        }, { passive: false });
+
+        centerComparisonSlider(container);
+    }
+
+    function initComparisonSliders(root) {
+        var scope = root || document;
+        scope.querySelectorAll('.img-comp-container').forEach(initComparisonSlider);
+    }
+
+    // ========== ГАЛЕРЕЯ ПОРТФОЛИО: ФИЛЬТРЫ ==========
+    function initPortfolioGallery() {
+        var grid = document.getElementById('portfolioGrid');
+        if (!grid) return;
+
+        var items = grid.querySelectorAll('.portfolio-item');
+        var buttons = document.querySelectorAll('.portfolio-filter-btn');
+
+        function itemMatches(filter, item) {
+            var cat = item.getAttribute('data-category');
+            if (filter === 'all') return true;
+            if (cat === 'medical') return false;
+            return cat === filter;
+        }
+
+        function applyFilter(filter) {
+            items.forEach(function(item) {
+                var match = itemMatches(filter, item);
+                if (match) {
+                    var wasHidden = item.hasAttribute('hidden');
+                    item.removeAttribute('hidden');
+                    item.classList.remove('portfolio-item--hide');
+                    if (wasHidden) {
+                        item.classList.remove('portfolio-item--show');
+                        void item.offsetWidth;
+                        item.classList.add('portfolio-item--show');
+                    } else {
+                        item.classList.add('portfolio-item--show');
+                    }
+                } else {
+                    item.classList.remove('portfolio-item--show');
+                    item.classList.add('portfolio-item--hide');
                 }
             });
 
-            document.addEventListener('mouseup', function() {
-                isDragging = false;
+            window.setTimeout(function() {
+                items.forEach(function(item) {
+                    if (!itemMatches(filter, item)) {
+                        item.setAttribute('hidden', '');
+                        item.classList.remove('portfolio-item--hide');
+                    }
+                });
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        grid.querySelectorAll('.portfolio-item:not([hidden]) .img-comp-container').forEach(function(c) {
+                            initComparisonSlider(c);
+                            centerComparisonSlider(c);
+                        });
+                    });
+                });
+            }, 300);
+        }
+
+        buttons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var f = btn.getAttribute('data-filter');
+                if (!f) return;
+
+                buttons.forEach(function(b) {
+                    var on = b === btn;
+                    b.classList.toggle('is-active', on);
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+
+                applyFilter(f);
             });
-
-            // Для тачскрина
-            container.addEventListener('touchstart', function(e) {
-                isDragging = true;
-                e.preventDefault();
-            }, { passive: false });
-
-            document.addEventListener('touchmove', function(e) {
-                if (isDragging) {
-                    moveSlider(e.touches[0].clientX);
-                }
-            }, { passive: true });
-
-            document.addEventListener('touchend', function() {
-                isDragging = false;
-            });
-
-            // Начальная позиция: середина
-            const rect = container.getBoundingClientRect();
-            const startX = rect.left + rect.width / 2;
-            moveSlider(startX);
         });
     }
 
@@ -221,8 +380,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        var calcSubmitBtn = calcForm.querySelector('.calc-submit');
+        var calcSubmitBusy = false;
+
         calcForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            if (calcSubmitBusy) return;
             if (!validate()) {
                 if (resultWrap) {
                     resultWrap.hidden = true;
@@ -233,47 +396,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            const area = Number(areaInput.value);
-            const selectedFinish = finishClass.selectedOptions[0];
-            const basePerM2 = Number(selectedFinish.getAttribute('data-base')) || 0;
+            calcSubmitBusy = true;
+            if (calcSubmitBtn) calcSubmitBtn.disabled = true;
 
-            let extrasPerM2 = 0;
-            calcForm.querySelectorAll('input[name="extra"]:checked').forEach(function(cb) {
-                extrasPerM2 += Number(cb.getAttribute('data-rate')) || 0;
-            });
+            try {
+                const area = Number(areaInput.value);
+                const selectedFinish = finishClass.selectedOptions[0];
+                const basePerM2 = Number(selectedFinish.getAttribute('data-base')) || 0;
 
-            const totalPerM2 = basePerM2 + extrasPerM2;
-            const totalCost = area * totalPerM2;
-
-            const coeff = timelineCoeff[roomType.value] || timelineCoeff.office;
-            let days = Math.ceil(coeff.k * area + coeff.b);
-            days += finishDaysExtra(finishClass.value, area);
-            if (calcForm.querySelector('input[name="extra"][value="design"]:checked')) days += 14;
-            if (calcForm.querySelector('input[name="extra"][value="engineering"]:checked')) days += 12;
-            if (calcForm.querySelector('input[name="extra"][value="smart"]:checked')) days += 8;
-
-            const formatted = Math.round(totalCost).toLocaleString('ru-RU');
-            resultPrice.innerHTML = 'Примерная стоимость: <strong>' + formatted + ' ₽</strong>';
-            resultTerm.textContent = 'Ориентировочный срок: от ' + days.toLocaleString('ru-RU') + ' рабочих дней';
-
-            if (resultWrap) {
-                resultWrap.hidden = false;
-                resultBox.classList.remove('calculator-result--visible');
-                void resultBox.offsetWidth;
-                requestAnimationFrame(function() {
-                    resultBox.classList.add('calculator-result--visible');
+                let extrasPerM2 = 0;
+                calcForm.querySelectorAll('input[name="extra"]:checked').forEach(function(cb) {
+                    extrasPerM2 += Number(cb.getAttribute('data-rate')) || 0;
                 });
+
+                const totalPerM2 = basePerM2 + extrasPerM2;
+                const totalCost = area * totalPerM2;
+
+                const coeff = timelineCoeff[roomType.value] || timelineCoeff.office;
+                let days = Math.ceil(coeff.k * area + coeff.b);
+                days += finishDaysExtra(finishClass.value, area);
+                if (calcForm.querySelector('input[name="extra"][value="design"]:checked')) days += 14;
+                if (calcForm.querySelector('input[name="extra"][value="engineering"]:checked')) days += 12;
+                if (calcForm.querySelector('input[name="extra"][value="smart"]:checked')) days += 8;
+
+                const formatted = Math.round(totalCost).toLocaleString('ru-RU');
+                resultPrice.innerHTML = 'Примерная стоимость: <strong>' + formatted + ' ₽</strong>';
+                resultTerm.textContent = 'Ориентировочный срок: от ' + days.toLocaleString('ru-RU') + ' рабочих дней';
+
+                if (resultWrap) {
+                    resultWrap.hidden = false;
+                    resultBox.classList.remove('calculator-result--visible');
+                    void resultBox.offsetWidth;
+                    requestAnimationFrame(function() {
+                        resultBox.classList.add('calculator-result--visible');
+                    });
+                }
+            } finally {
+                calcSubmitBusy = false;
+                if (calcSubmitBtn) calcSubmitBtn.disabled = false;
             }
         });
     }
 
-    // ========== ФОРМА ==========
-    const form = document.getElementById('estimateForm');
+    // ========== ФОРМА ОБРАТНОЙ СВЯЗИ ==========
+    var form = document.getElementById('estimateForm');
+    var formSubmitBtn = document.getElementById('estimateFormSubmit');
+    var phoneInput = document.getElementById('contactPhone');
+    if (phoneInput) initPhoneMask(phoneInput);
+
     if (form) {
+        var formSent = false;
+
         form.addEventListener('submit', function(event) {
             event.preventDefault();
+            if (formSent) return;
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            var digits = phoneInput ? phoneInput.value.replace(/\D/g, '') : '';
+            if (digits.length < 11) {
+                if (phoneInput) {
+                    phoneInput.setCustomValidity('Введите полный номер в формате +7 (___) ___-__-__');
+                    phoneInput.reportValidity();
+                    phoneInput.setCustomValidity('');
+                }
+                return;
+            }
+
+            formSent = true;
+            if (formSubmitBtn) {
+                formSubmitBtn.disabled = true;
+                formSubmitBtn.setAttribute('aria-busy', 'true');
+            }
+
             form.style.display = 'none';
-            const successMsg = document.getElementById('successMessage');
+            var successMsg = document.getElementById('successMessage');
             if (successMsg) {
                 successMsg.style.display = 'block';
                 requestAnimationFrame(function() {
@@ -285,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ========== КУКИ ==========
     function initCookieConsent() {
-        if (localStorage.getItem('cookiesAccepted')) return;
+        if (storageGet('cookiesAccepted')) return;
 
         const consent = document.createElement('div');
         consent.className = 'cookie-consent';
@@ -301,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function() {
         consent.querySelector('.cookie-btn').addEventListener('click', function() {
             consent.style.transform = 'translateY(100%)';
             consent.style.opacity = '0';
-            localStorage.setItem('cookiesAccepted', 'true');
+            storageSet('cookiesAccepted', 'true');
             setTimeout(function() {
                 consent.remove();
             }, 320);
@@ -324,10 +524,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Запускаем всё
+    initSmoothAnchorLinks();
     initScrollReveal();
-    initComparisonSliders();
+    initComparisonSliders(document.getElementById('portfolioGrid') || document);
+    initPortfolioGallery();
     initRenovationCalculator();
     initCookieConsent();
+}
 
-    console.log('✅ Все скрипты загружены успешно');
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLineaApp);
+} else {
+    initLineaApp();
+}
