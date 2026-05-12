@@ -267,16 +267,33 @@ body {
     padding: 80px 0;
     background: #fff;
 }
-.subtitle {
-    text-align: center;
-    color: #777;
-    margin-bottom: 36px;
-    margin-top: -30px;
-    font-size: 18px;
+
+.portfolio-intro {
     max-width: 640px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto 28px;
+    padding: 0 4px;
+    text-align: center;
+}
+
+.portfolio-intro h2 {
+    font-size: clamp(26px, 5vw, 36px);
+    color: #1a1a1a;
+    margin-bottom: 14px;
+    line-height: 1.2;
+}
+
+.portfolio-lead {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.portfolio-lead-line {
+    margin: 0;
+    color: #666;
+    font-size: clamp(15px, 3.8vw, 18px);
     line-height: 1.55;
+    text-wrap: balance;
 }
 
 .portfolio-filters {
@@ -285,6 +302,9 @@ body {
     justify-content: center;
     gap: 10px;
     margin-bottom: 40px;
+    position: relative;
+    z-index: 10;
+    isolation: isolate;
 }
 
 .portfolio-filter-btn {
@@ -292,6 +312,10 @@ body {
     font-size: 14px;
     font-weight: 600;
     padding: 10px 18px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 999px;
     border: 1px solid #d0d0d0;
     background: #fff;
@@ -754,7 +778,15 @@ body {
 
     .portfolio-filter-btn {
         font-size: 13px;
-        padding: 9px 14px;
+        padding: 10px 14px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .portfolio-intro {
+        margin-bottom: 22px;
     }
 
     .client-types {
@@ -1112,12 +1144,14 @@ body.splash-active {
     opacity: 0;
     transform: translateY(26px);
     transition: opacity var(--motion-duration) var(--motion-ease), transform var(--motion-duration) var(--motion-ease);
+    pointer-events: none;
 }
 
 body:not(.splash-active) .hero-content > *,
 .reveal-on-scroll.is-visible {
     opacity: 1;
     transform: translateY(0);
+    pointer-events: auto;
 }
 
 body:not(.splash-active) .hero-content > *:nth-child(1) { transition-delay: 0.08s; }
@@ -1633,6 +1667,7 @@ body:not(.splash-active) .hero-content > *:nth-child(4) { transition-delay: 0.32
     .reveal-on-scroll {
         opacity: 1;
         transform: none;
+        pointer-events: auto;
     }
 
     .calculator-result,

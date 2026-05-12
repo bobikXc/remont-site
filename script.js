@@ -238,8 +238,10 @@ function initLineaApp() {
         var grid = document.getElementById('portfolioGrid');
         if (!grid) return;
 
+        var filterWrap = document.querySelector('.portfolio-filters');
+        if (!filterWrap) return;
+
         var items = grid.querySelectorAll('.portfolio-item');
-        var buttons = document.querySelectorAll('.portfolio-filter-btn');
 
         function itemMatches(filter, item) {
             var cat = item.getAttribute('data-category');
@@ -286,19 +288,20 @@ function initLineaApp() {
             }, 300);
         }
 
-        buttons.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var f = btn.getAttribute('data-filter');
-                if (!f) return;
+        filterWrap.addEventListener('click', function(e) {
+            var btn = e.target.closest('.portfolio-filter-btn');
+            if (!btn || !filterWrap.contains(btn)) return;
 
-                buttons.forEach(function(b) {
-                    var on = b === btn;
-                    b.classList.toggle('is-active', on);
-                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-                });
+            var f = btn.getAttribute('data-filter');
+            if (!f) return;
 
-                applyFilter(f);
+            filterWrap.querySelectorAll('.portfolio-filter-btn').forEach(function(b) {
+                var on = b === btn;
+                b.classList.toggle('is-active', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
             });
+
+            applyFilter(f);
         });
     }
 
